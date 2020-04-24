@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="../vue.js"></script>
+  <title>Vue JS</title>
+  <style>
+    .strikeout {
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <h1>{{ title.toUpperCase() }}</h1>
+    <button
+      v-if="state !== 'edit'"
+      @click="changeState('edit')"
+    >
+      Add Item
+    </button>
+    <button v-else @click="changeState('default')">Cancel</button>
+    <button
+      v-if="state === 'edit'"
+      :disabled="newItem.length === 0"
+      @click="addItem">Save Item</button>
+    <span>{{ charactersNumber }}/200</span>
+    <input
+      v-if="state === 'edit'"
+      type="text"
+      placeholder="Add an item"
+      v-model="newItem"
+      @keyup.enter="addItem"/>
+    <ul v-if="items.length !== 0">
+    <li
+      v-for="item in items"
+      :class="{ strikeout: item.purchased }"
+      style="cursor: pointer"
+      @click="togglePurchased(item)"
+    >
+      {{ item.label }}
+    </li>
+    </ul>
+    <p v-else>No items to show</p>
+  </div>
+  <script>
+    new Vue({
+      data: {
+        state: "default",
+        title: "Shopping List",
+        items: [
+          {
+            label: "10 party hats",
+            purchased: true
+          },
+          {
+            label: "2 board games",
+            purchased: false
+          },
+          {
+            label: "20 cups",
+            purchased: true
+          }
+        ],
+        newItem: ""
+      },
+      computed: {
+        charactersNumber: function() {
+          return this.newItem.length;
+        }
+      },
+      methods: {
+        addItem: function() {
+          this.items.push({
+            label: this.newItem,
+            purchased: false
+          });
+          this.newItem = "";
+        },
+        changeState: function(newState) {
+          this.state = newState;
+          this.newItem = "";
+        },
+        togglePurchased: function(item) {
+          item.purchased = !item.purchased;
+        }
+      }
+    }).$mount("#root");
+  </script>
+</body>
+</html>
