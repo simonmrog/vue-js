@@ -1,12 +1,15 @@
 <template>
   <div id="places-list">
-    <h1>My Places</h1>
-    <ul>
-      <li :key="place.id" v-for="place in placesList">
-        <PlaceDetails :place="place"/>
-        <hr />
-      </li>
-    </ul>
+    <div v-if="isLoading">Loading...</div>
+    <div v-else>
+      <h1>My Places</h1>
+      <ul>
+        <li :key="place.id" v-for="place in placesList">
+          <PlaceDetails :place="place"/>
+          <hr />
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -21,7 +24,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      "placesList"
+      "placesList", "isLoading"
     ])
   }
 }

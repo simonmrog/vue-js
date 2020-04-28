@@ -18,22 +18,28 @@ const store = new Vuex.Store({
   plugins: [myPlugin],
   state: {
     placesList: [],
+    isLoading: true,
     actualPlace: {},
   },
   getters: {
     placesList: state => state.placesList,
-    message: state => state.message
+    isLoading: state => state.isLoading
   },
   actions: {
     getPlacesFromAPI: async context => {
+      context.commit("setLoading", true);
       const placesList = await places();
       context.commit("addPlaces", placesList);
+      context.commit("setLoading", false);
     },
     deletePlace: (context, placeId) => {
       context.commit("deletePlace", placeId);
     }
   },
   mutations: {
+    setLoading: (state, isLoading) => {
+      state.isLoading = isLoading;
+    },
     addPlaces: (state, places) => {
       state.placesList = state.placesList.concat(places);
     },
